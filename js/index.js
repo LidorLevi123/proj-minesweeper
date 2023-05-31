@@ -99,9 +99,24 @@ function checkGameOver() {
     if (gGame.liveCount <= 0) {
         gGame.isOn = false
         console.log('You lose! :(')
-    } else if (gBoard.length ** 2) {
-
+    } else if (checkVictory()) {
+        gGame.isOn = false
+        console.log('You won! :)')
+        updateSmiley(SMILEY_WIN, false)
     }
+}
+
+function checkVictory() {
+
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            var currCell = gBoard[i][j]
+            if(!(currCell.isMine && currCell.isMarked)) return false
+            if(currCell.isMine) continue
+            if(!currCell.isShown) return false
+        }
+    }
+    return true
 }
 
 function revealNearbyCells(rowIdx, colIdx) {
@@ -112,6 +127,7 @@ function revealNearbyCells(rowIdx, colIdx) {
         if (i < 0 || i >= gBoard.length) continue
         for (var j = colIdx - 1; j < colIdx + 2; j++) {
             if (j < 0 || j >= gBoard.length) continue
+            if(gBoard[i][j].isShown) continue
 
             var currCell = gBoard[i][j]
 
@@ -135,6 +151,7 @@ function expandShown(i, j) {
     if (gBoard[i][j].isShown) return
     
     gBoard[i][j].isShown = true
+    gGame.shownCount++
     
     if (gBoard[i][j].minesAroundCount > 0) return
 
@@ -152,6 +169,7 @@ function expandShown(i, j) {
 }
 
 function resetGame() {
+    updateSmiley(SMILEY_NORMAL, false)
     return {
         isOn: true,
         isClickedOnce: false,

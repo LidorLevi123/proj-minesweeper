@@ -19,9 +19,11 @@ function updateHints(elHints) {
     elHints.innerHTML = spanHTML
 }
 
-function updateSmiley(smiley) {
+function updateSmiley(smiley, isSetTimeout) {
     var elSmiley = document.querySelector('.smiley')
     elSmiley.innerText = smiley
+
+    if(!isSetTimeout) return
 
     setTimeout(() => {
         elSmiley.innerText = SMILEY_NORMAL

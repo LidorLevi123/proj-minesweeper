@@ -28,8 +28,8 @@ function onCellClicked(elCell, i, j, event) {
 
     }
 
-    checkGameOver()
     renderBoard()
+    checkGameOver()
 }
 
 function onHandleHint(elHint) {

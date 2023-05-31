@@ -8,7 +8,8 @@ function handleMine(elCell, cell) {
     elCell.style.backgroundColor = 'red'
     cell.isShown = true
     gGame.liveCount--
-    updateSmiley(SMILEY_SAD)
+    gGame.shownCount++
+    updateSmiley(SMILEY_SAD, true)
 }
 
 function setRandomMines() {
