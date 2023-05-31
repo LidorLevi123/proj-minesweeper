@@ -49,11 +49,55 @@ function onCellMarked(cell) {
     }
 }
 
+function onChangeLevel(diff) {
+
+    switch(diff) {
+        case 1: gLevel = BEGINNER; break
+        case 2: gLevel = MEDIUM; break
+        case 3: gLevel = EXPERT; break
+    }
+
+    onInit()
+}
+
 function onSafeClick() {
 
-    const randI = getRandomInt(0, gBoard.length)
-    const randj = getRandomInt(0, gBoard.length)
-    const cell = gBoard[randI][randj]
+    if(gGame.safeCount <= 0) return
+    if(onSafeClick.callCount >= 10) return
 
+    onSafeClick.callCount = (onSafeClick.callCount || 0) + 1
+
+    const randI = getRandomInt(0, gBoard.length)
+    const randJ = getRandomInt(0, gBoard.length)
+    const cell = gBoard[randI][randJ]
+    
     if(cell.isMine || cell.isShown) onSafeClick()
+    else {
+        const selector = getSelector({i: randI, j: randJ})
+        const elCell = document.querySelector(selector)
+    
+        gGame.safeCount--
+    
+        elCell.style.backgroundColor = 'white'
+        setTimeout(() => {
+            elCell.style.backgroundColor = 'rgb(105, 105, 105)'
+        }, 3000)
+    }
+}
+
+function onManualMode(elBtn) {
+    var elSlider = document.querySelector('#slider')
+    var elValue = document.querySelector('.value')
+
+    elBtn.style.display = 'none'
+    elSlider.style.display = 'inline-block'
+    elValue.style.display = 'inline-block'
+}
+
+function onChangeSliderValue(elSlider) {
+
+    var elSelectedValue = document.querySelector('.value')
+    var value = elSlider.value
+
+    elSelectedValue.innerText = value
 }

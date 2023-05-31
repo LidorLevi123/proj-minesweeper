@@ -10,10 +10,17 @@
 <body onload="onInit()">
 
     <div class="main-container">
+
+        <div class="levels-container" style="margin-bottom: 5px;">
+            <button onclick="onChangeLevel(1)" style="cursor: pointer;">Beginner</button>
+            <button onclick="onChangeLevel(2)" style="cursor: pointer;">Medium</button>
+            <button onclick="onChangeLevel(3)" style="cursor: pointer;">Expert</button>
+        </div>
         
         <div class="buttons-container" style="margin-bottom: 5px;">
             <button onclick="onSafeClick()" style="cursor: pointer;">Safe Click</button>
-            <button onclick="onSafeClick()" style="cursor: pointer;">Manual Mode</button>
+            <button onclick="onManualMode(this)" style="cursor: pointer;">Manual Mode</button>
+            <input oninput="onChangeSliderValue(this)" type="range" id="slider" min="1" max="32" style="display: none"><span class="value" style="display: none">1</span>
         </div>
 
         <div class="info-container">
@@ -29,10 +36,10 @@
     </div>
     <h2>© Lidor Levi</h2>
     
-    <script src="js/index.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/click-reactions.js"></script>
     <script src="js/mines.js"></script>
     <script src="js/other.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>

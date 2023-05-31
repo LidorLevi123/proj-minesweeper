@@ -15,23 +15,22 @@ const SMILEY_SAD = '😲'
 const SMILEY_WIN = '😎'
 
 var gBoard
-var gLevel
 var gGame
+var gLevel = EXPERT
 
 function onInit() {
-    gLevel = EXPERT
-    gBoard = buildBoard(gLevel.size)
+    gBoard = buildBoard()
     gGame = resetGame()
 
     renderBoard()
 }
 
-function buildBoard(size) {
+function buildBoard() {
     var board = []
 
-    for (var i = 0; i < size; i++) {
+    for (var i = 0; i < gLevel.size; i++) {
         board.push([])
-        for (var j = 0; j < size; j++) {
+        for (var j = 0; j < gLevel.size; j++) {
             board[i][j] = {
                 minesAroundCount: 0,
                 isShown: false,
@@ -156,9 +155,12 @@ function resetGame() {
     return {
         isOn: true,
         isClickedOnce: false,
-        hintMode: false,
+        isHintMode: false,
+        isManualMode: false,
+        minesToPlace: 0,
         liveCount: 3,
         hintCount: 3,
+        safeCount: 3,
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0
