@@ -11,8 +11,10 @@ const HINT = '💡'
 const EMPTY = ''
 
 const SMILEY_NORMAL = '😃'
-const SMILEY_SAD = '😲'
 const SMILEY_WIN = '😎'
+const SMILEY_HURT = '😲'
+const SMILEY_DEAD = '💀'
+
 
 var gBoard
 var gGame
@@ -22,6 +24,7 @@ function onInit() {
     gBoard = buildBoard()
     gGame = resetGame()
 
+    
     renderBoard()
 }
 
@@ -98,11 +101,10 @@ function renderBoard() {
 function checkGameOver() {
     if (gGame.liveCount <= 0) {
         gGame.isOn = false
-        console.log('You lose! :(')
+        updateSmiley(SMILEY_DEAD)
     } else if (checkVictory()) {
         gGame.isOn = false
-        console.log('You won! :)')
-        updateSmiley(SMILEY_WIN, false)
+        updateSmiley(SMILEY_WIN)
     }
 }
 
@@ -111,12 +113,11 @@ function checkVictory() {
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j]
-            if(!(currCell.isMine && currCell.isMarked)) return false
-            if(currCell.isMine) continue
-            if(!currCell.isShown) return false
+            if(!currCell.isShown && !currCell.isMarked) return false
         }
     }
-    return true
+    if(gGame.minesToPlace) return gGame.markedCount === gGame.minesToPlace
+    return gGame.markedCount === gLevel.mines
 }
 
 function revealNearbyCells(rowIdx, colIdx) {
@@ -150,6 +151,7 @@ function expandShown(i, j) {
     if (j < 0 || j >= gBoard.length) return
     if (gBoard[i][j].isShown) return
     
+    gGame.cellStack.push({ element: null, cell: gBoard[i][j], i, j })
     gBoard[i][j].isShown = true
     gGame.shownCount++
     
@@ -169,18 +171,22 @@ function expandShown(i, j) {
 }
 
 function resetGame() {
-    updateSmiley(SMILEY_NORMAL, false)
+    updateSmiley(SMILEY_NORMAL)
     return {
         isOn: true,
         isClickedOnce: false,
+        isDarkMode: false,
         isHintMode: false,
         isManualMode: false,
+        isMinesPlaced: false,
         minesToPlace: 0,
+        minesPlaced: 0,
         liveCount: 3,
         hintCount: 3,
         safeCount: 3,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 0
+        secsPassed: 0,
+        cellStack: []
     }
 }

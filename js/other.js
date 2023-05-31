@@ -19,13 +19,13 @@ function updateHints(elHints) {
     elHints.innerHTML = spanHTML
 }
 
-function updateSmiley(smiley, isSetTimeout) {
+function updateSmiley(smiley) {
     var elSmiley = document.querySelector('.smiley')
     elSmiley.innerText = smiley
 
-    if(!isSetTimeout) return
+    if (smiley === SMILEY_DEAD || smiley === SMILEY_WIN) return
 
     setTimeout(() => {
         elSmiley.innerText = SMILEY_NORMAL
-    }, 1500)
+    }, 1200)
 }

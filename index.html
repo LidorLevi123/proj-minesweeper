@@ -9,6 +9,10 @@
 </head>
 <body onload="onInit()">
 
+    <div class="dark-slider" onclick="onMoveCircle()">
+        <div class="circle"></div>
+    </div>
+
     <div class="main-container">
 
         <div class="levels-container" style="margin-bottom: 5px;">
@@ -19,21 +23,23 @@
         
         <div class="buttons-container" style="margin-bottom: 5px;">
             <button onclick="onSafeClick()" style="cursor: pointer;">Safe Click</button>
-            <button onclick="onManualMode(this)" style="cursor: pointer;">Manual Mode</button>
-            <input oninput="onChangeSliderValue(this)" type="range" id="slider" min="1" max="32" style="display: none"><span class="value" style="display: none">1</span>
+            <button onclick="onSwitchToSlider(this)" style="cursor: pointer;">Manual Mode</button>
+            <input oninput="onChangeSliderValue(this)" type="range" id="slider" min="1" max="32" style="display: none">
+            <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
         </div>
 
         <div class="info-container">
             <span class="lives-container"></span>
             <span title="Reset" class="smiley" onclick="onInit()">😀</span>
-            <span class="hints-container"></span>
+            <span title="Hint" class="hints-container"></span>
         </div>
 
         <table>
             <tbody class="board"></tbody>
         </table>
-    
+        
     </div>
+    <button class="undo" onclick="onUndo()">↪</button>
     <h2>© Lidor Levi</h2>
     
     <script src="js/utils.js"></script>

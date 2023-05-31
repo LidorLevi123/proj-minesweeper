@@ -9,6 +9,7 @@ body, .main-container {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    transition: .3s;
 }
 
 .main-container {
@@ -22,7 +23,7 @@ body, .main-container {
 
 .info-container {
     display: flex;
-    padding: 5px 0px;
+    padding: 5px 5px;
     width: 31vw;
     text-align: left;
     margin-bottom: 1%;
@@ -48,15 +49,31 @@ body, .main-container {
 .hint {
     cursor: pointer;
     margin: 0 2px;
-    padding: 2px;;
+    padding: 2px;
+    border-radius: 5px;
 }
 
 .cell .hinted {
     background-color: aliceblue;
 }
 
-.used {
-    background-color: yellow;
+#slider {
+    width: 70px;
+}
+
+.square {
+    padding: 2px;
+    text-align: center;
+    width: 4vw;
+    background-color: rgb(255 214 121);
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+.square + .go {
+    width: 4vw;
 }
 
 .cell {
@@ -66,6 +83,7 @@ body, .main-container {
     text-align: center;
     background-color: rgb(105, 105, 105);
     border: 2px solid black;
+    transition: .1s;
 }
 
 .blue {
@@ -100,4 +118,47 @@ body, .main-container {
 
 .mine {
     background-color: red;
+}
+
+.undo {
+    position: absolute;
+    transform: translate(500%, -600%);
+    font-size: 25px;
+}
+
+.dark-slider {
+    position: relative;
+    border-radius: 50px;
+    background-color: rgb(105, 105, 105);
+    width: 90px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.circle {
+    position: absolute;
+    top: 5px;
+    left: 3px;
+    border-radius: 50%;
+    background-color: rgb(235, 235, 235);
+    width: 30px;
+    height: 30px;
+    transition: .3s;
+}
+
+.cell:hover {
+    background-color: gray;
+}
+
+.smiley:hover {
+    box-shadow: inset 0px 0px 5px 0px rgba(243, 243, 243, 0.6);
+}
+
+.hint:hover {
+    box-shadow: inset 0px 0px 5px 0px rgb(255, 255, 0);
+    border-radius: 5px;
+}
+
+.square:hover {
+    opacity: 0.8;
 }

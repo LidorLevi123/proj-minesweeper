@@ -4,15 +4,29 @@ function revealAllMines() {
     console.log('Game over! Revealing all mines...')
 }
 
+function placeMine(elCell, i, j) {
+    gGame.isMinesPlaced = true
+    gBoard[i][j].isMine = true
+    gGame.minesPlaced++
+    elCell.innerText = MINE
+    if(gGame.minesToPlace === gGame.minesPlaced) {
+        setMinesNegsCount()
+        renderBoard()
+        gGame.isManualMode = false
+    }
+}
+
 function handleMine(elCell, cell) {
     elCell.style.backgroundColor = 'red'
     cell.isShown = true
     gGame.liveCount--
     gGame.shownCount++
-    updateSmiley(SMILEY_SAD, true)
+    gGame.markedCount++
+    updateSmiley(SMILEY_HURT)
 }
 
 function setRandomMines() {
+
     for (var i = 0; i < gLevel.mines; i++) {
 
         var randI = getRandomInt(0, gBoard.length)
