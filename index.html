@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Minesweeper</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body onload="onInit()">
 
-    <table>
-        <tbody class="board"></tbody>
-    </table>
+    <div class="main-container">
 
+        <div class="info-container">
+            <span class="lives-container"></span>
+            <span class="smiley" onclick="onInit()">😀</span>
+            <span class="hints-container"></span>
+        </div>
+
+        <table>
+            <tbody class="board"></tbody>
+        </table>
+    
+    </div>
     <h2>© Lidor Levi</h2>
     
     <script src="js/index.js"></script>
