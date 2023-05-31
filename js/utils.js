@@ -12,3 +12,7 @@ function playSound(name) {
     audio.volume = 0.1
 	audio.play()
 }
+
+function getSelector(coords) {
+    return `.cell-${coords.i}-${coords.j}`
+}

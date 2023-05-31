@@ -16,6 +16,10 @@ body, .main-container {
     width: 500px;
 }
 
+.board {
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.6);
+}
+
 .info-container {
     display: flex;
     padding: 5px 0px;
@@ -31,6 +35,7 @@ body, .main-container {
     padding: 2px;
     margin: auto;
     width: auto;
+    cursor: pointer;
 }
 
 .lives-container, .hints-container {
@@ -46,16 +51,50 @@ body, .main-container {
     padding: 2px;;
 }
 
+.cell .hinted {
+    background-color: aliceblue;
+}
+
+.used {
+    background-color: yellow;
+}
+
 .cell {
     font-size: 18px;
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.7em;
+    height: 1.7em;
     text-align: center;
-    background-color: gray;
+    background-color: rgb(105, 105, 105);
+    border: 2px solid black;
+}
+
+.blue {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: blue;
+}
+
+.green {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: green;
+}
+
+.red {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: red;
+}
+
+.darkblue {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: darkblue;
+}
+
+.darkred {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: darkred;
 }
 
 .clicked {
-    box-shadow: inset 0px 0px 3px 1px black;
+    box-shadow: inset 0px 0px 3px 1px rgb(255, 255, 255);
     background-color: rgb(149, 147, 147);
 }
 

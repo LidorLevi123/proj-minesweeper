@@ -10,10 +10,15 @@
 <body onload="onInit()">
 
     <div class="main-container">
+        
+        <div class="buttons-container" style="margin-bottom: 5px;">
+            <button onclick="onSafeClick()" style="cursor: pointer;">Safe Click</button>
+            <button onclick="onSafeClick()" style="cursor: pointer;">Manual Mode</button>
+        </div>
 
         <div class="info-container">
             <span class="lives-container"></span>
-            <span class="smiley" onclick="onInit()">😀</span>
+            <span title="Reset" class="smiley" onclick="onInit()">😀</span>
             <span class="hints-container"></span>
         </div>
 
@@ -26,5 +31,7 @@
     
     <script src="js/index.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/click-reactions.js"></script>
+    <script src="js/mines.js"></script>
 </body>
 </html>
