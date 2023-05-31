@@ -48,3 +48,12 @@ function onCellMarked(cell) {
         gGame.markedCount++
     }
 }
+
+function onSafeClick() {
+
+    const randI = getRandomInt(0, gBoard.length)
+    const randj = getRandomInt(0, gBoard.length)
+    const cell = gBoard[randI][randj]
+
+    if(cell.isMine || cell.isShown) onSafeClick()
+}

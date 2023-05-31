@@ -56,10 +56,10 @@ function renderBoard() {
             var data = currCell.minesAroundCount > 0 ? currCell.minesAroundCount : ''
 
             if (data === 1) className += ' blue'
-            if (data === 2) className += ' green'
-            if (data === 3) className += ' red'
-            if (data === 4) className += ' darkblue'
-            if (data === 5) className += ' darkred'
+            else if (data === 2) className += ' green'
+            else if (data === 3) className += ' red'
+            else if (data === 4) className += ' darkblue'
+            else if (data === 5) className += ' darkred'
 
             if (currCell.isShown) {
                 className += ' clicked'
