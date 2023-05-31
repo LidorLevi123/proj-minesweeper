@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+}
+
+table {
+    margin: 250px auto;
+}
+
+.cell {
+    font-size: 20px;
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    background-color: gray;
+}
+
+h2 {
+    text-align: center;
+}
