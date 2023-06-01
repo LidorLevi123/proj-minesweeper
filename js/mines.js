@@ -1,17 +1,39 @@
 'use strict'
 
-function revealAllMines() {
-    console.log('Game over! Revealing all mines...')
+function revealAllMinesAtRange(topLeftCoord, bottomRightCoord) {
+    var revealedCells = []
+
+    for (var i = topLeftCoord.i; i < bottomRightCoord.i + 1; i++) {
+        for (var j = topLeftCoord.j; j < bottomRightCoord.j + 1; j++) {
+            if(gBoard[i][j].isShown) continue
+
+            var currCell = gBoard[i][j]
+
+            currCell.isShown = true
+            currCell.isMegaHint = true
+            revealedCells.push(currCell)
+        }
+    }
+    renderBoard()
+
+    setTimeout(() => {
+        revealedCells.forEach(cell => {
+            cell.isShown = false
+            cell.isMegaHint = false
+        })
+        renderBoard()
+    }, 3000)
 }
 
 function placeMine(elCell, i, j) {
-    gGame.isMinesPlaced = true
+    gGame.isManualUsed = true
     gBoard[i][j].isMine = true
     gGame.minesPlaced++
     elCell.innerText = MINE
     if(gGame.minesToPlace === gGame.minesPlaced) {
         setMinesNegsCount()
         renderBoard()
+        onSwitchToSlider(false)
         gGame.isManualMode = false
     }
 }

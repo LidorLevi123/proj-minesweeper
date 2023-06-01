@@ -9,7 +9,7 @@
 </head>
 <body onload="onInit()">
 
-    <div class="dark-slider" onclick="onMoveCircle()">
+    <div title="Toggle Dark-Mode" class="dark-slider" onclick="onToggleDarkMode()">
         <div class="circle"></div>
     </div>
 
@@ -23,14 +23,15 @@
         
         <div class="buttons-container" style="margin-bottom: 5px;">
             <button onclick="onSafeClick()" style="cursor: pointer;">Safe Click</button>
-            <button onclick="onSwitchToSlider(this)" style="cursor: pointer;">Manual Mode</button>
+            <button onclick="onMegaHint()">Mega Hint</button>
+            <button onclick="onSwitchToSlider(true)" class="manual-btn" style="cursor: pointer;">Manual Mode</button>
             <input oninput="onChangeSliderValue(this)" type="range" id="slider" min="1" max="32" style="display: none">
             <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
         </div>
 
         <div class="info-container">
             <span class="lives-container"></span>
-            <span title="Reset" class="smiley" onclick="onInit()">😀</span>
+            <span title="Reset" class="smiley" onclick="onInit(), onSwitchToSlider(false)">😀</span>
             <span title="Hint" class="hints-container"></span>
         </div>
 
@@ -39,7 +40,7 @@
         </table>
         
     </div>
-    <button class="undo" onclick="onUndo()">↪</button>
+    <button title="Undo Move" class="undo" onclick="onUndo()">↪</button>
     <h2>© Lidor Levi</h2>
     
     <script src="js/utils.js"></script>

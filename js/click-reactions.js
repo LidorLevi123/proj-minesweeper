@@ -7,28 +7,27 @@ function onCellClicked(elCell, i, j, event) {
     if (event.button === 2) {
         onCellMarked(cell)
     } else {
+        if (cell.isShown || cell.isMarked) return
 
-        if (!gGame.isClickedOnce && !gGame.isManualMode && !gGame.isMinesPlaced) {
+        if (!gGame.isClickedOnce && !gGame.isManualMode && !gGame.isManualUsed && !gGame.isMegaMode) {
             gGame.isClickedOnce = true
             setRandomMines()
             setMinesNegsCount()
         } else if (gGame.isManualMode) {
             placeMine(elCell, i, j)
             return
-        }
-
-        if (cell.isShown || cell.isMarked) return
-
+        } else if (gGame.isMegaMode && !gGame.isMegaUsed) {
+            handleMegaMode(elCell, {i, j})
+            return
+        } 
         if (gGame.isHintMode) {
             gGame.isHintMode = false
             revealNearbyCells(i, j)
-
         } else {
             gGame.cellStack.push({ element: elCell, cell, i, j })
             if (!cell.isMine) expandShown(i, j)
             else handleMine(elCell, cell)
         }
-
     }
 
     checkGameOver()
@@ -36,10 +35,11 @@ function onCellClicked(elCell, i, j, event) {
 }
 
 function onHandleHint(elHint) {
-    gGame.isHintMode = true
+    gGame.isHintMode = !gGame.isHintMode
+    var elHints = document.querySelector('.hints-container')
 
-    elHint.style.backgroundColor = 'yellow'
-    gGame.hintCount--
+    if (gGame.isHintMode) elHint.style.backgroundColor = 'yellow'
+    else updateHints(elHints)
 }
 
 function onCellMarked(cell) {
@@ -61,7 +61,6 @@ function onChangeLevel(diff) {
         case 3: gLevel = EXPERT; break
     }
 
-    console.log(gLevel.mines);
     elSlider.max = gLevel.size ** 2
 
     onInit()
@@ -92,13 +91,22 @@ function onSafeClick() {
     }
 }
 
-function onSwitchToSlider(elBtn) {
-    var elSlider = document.querySelector('#slider')
-    var elSquare = document.querySelector('.square')
-
-    elBtn.style.display = 'none'
-    elSlider.style.display = 'inline-block'
-    elSquare.style.display = 'inline-block'
+function onSwitchToSlider(isSlider) {
+    if (isSlider) {
+        const elManualBtn = document.querySelector('.manual-btn')
+        const elSlider = document.querySelector('#slider')
+        const elAmount = document.querySelector('.square')
+        elManualBtn.style.display = 'none'
+        elSlider.style.display = 'inline-block'
+        elAmount.style.display = 'inline-block'
+    } else {
+        const elManualBtn = document.querySelector('.manual-btn')
+        const elSlider = document.querySelector('#slider')
+        const elAmount = document.querySelector('.square')
+        elManualBtn.style.display = 'inline-block'
+        elSlider.style.display = 'none'
+        elAmount.style.display = 'none'
+    }
 }
 
 function onChangeSliderValue(elSlider) {
@@ -109,6 +117,7 @@ function onChangeSliderValue(elSlider) {
 }
 
 function onManualMode(elValue) {
+    onInit()
     gGame.isManualMode = true
     gGame.minesToPlace = +elValue.innerText
 }
@@ -128,14 +137,14 @@ function onUndo() {
     renderBoard()
 }
 
-function onMoveCircle() {
+function onToggleDarkMode() {
     gGame.isDarkMode = !gGame.isDarkMode
     const elSlider = document.querySelector('.dark-slider')
     const elCircle = document.querySelector('.circle')
     const elBody = document.querySelector('body')
     const elAll = document.querySelector('*')
 
-    if(gGame.isDarkMode) {
+    if (gGame.isDarkMode) {
         elCircle.style.left = '57px'
         elCircle.style.backgroundColor = 'rgb(105, 105, 105)'
         elSlider.style.backgroundColor = 'rgb(235, 235, 235)'
@@ -145,7 +154,11 @@ function onMoveCircle() {
         elCircle.style.left = '3px'
         elCircle.style.backgroundColor = 'rgb(235, 235, 235)'
         elSlider.style.backgroundColor = 'rgb(105, 105, 105)'
-        elBody.style.backgroundColor = 'white'
+        elBody.style.backgroundColor = 'rgb(235, 235, 235)'
         elAll.style.color = 'black'
     }
+}
+
+function onMegaHint() {
+    gGame.isMegaMode = true
 }

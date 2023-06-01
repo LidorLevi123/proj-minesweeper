@@ -24,7 +24,6 @@ function onInit() {
     gBoard = buildBoard()
     gGame = resetGame()
 
-    
     renderBoard()
 }
 
@@ -39,11 +38,12 @@ function buildBoard() {
                 isShown: false,
                 isMine: false,
                 isMarked: false,
-                isClicked: false
+                isClicked: false,
+                isHint: false,
+                isMegaHint: false
             }
         }
     }
-
     return board
 }
 
@@ -55,30 +55,37 @@ function renderBoard() {
 
             var currCell = gBoard[i][j]
             var className = 'cell'
-            var data = currCell.minesAroundCount > 0 ? currCell.minesAroundCount : ''
+            var cellData = currCell.minesAroundCount > 0 ? currCell.minesAroundCount : ''
 
-            if (data === 1) className += ' blue'
-            else if (data === 2) className += ' green'
-            else if (data === 3) className += ' red'
-            else if (data === 4) className += ' darkblue'
-            else if (data === 5) className += ' darkred'
+            if (cellData === 1) className += ' blue'
+            else if (cellData === 2) className += ' green'
+            else if (cellData === 3) className += ' red'
+            else if (cellData === 4) className += ' darkblue'
+            else if (cellData === 5) className += ' darkred'
+            else if (cellData === 6) className += ' darkkhaki'
+            else if (cellData === 7) className += ' darkorange'
+            else if (cellData === 8) className += ' darkmagneta'
+
+            if (currCell.isMegaHint) className += ' mega'
+            else if (currCell.isHint) className += ' hinted'
 
             if (currCell.isShown) {
                 className += ' clicked'
                 if (currCell.isMine) {
-                    data = MINE
+                    cellData = MINE
                     className += ' mine'
                 }
+
             } else if (currCell.isMarked) {
-                data = FLAG
+                cellData = FLAG
             } else {
-                data = EMPTY
+                cellData = EMPTY
             }
 
             strHTML += `<td 
             class="${className} cell-${i}-${j}" 
             onmousedown="onCellClicked(this, ${i}, ${j}, event)">
-            ${data}
+            ${cellData}
             </td>`
 
         }
@@ -113,10 +120,10 @@ function checkVictory() {
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j]
-            if(!currCell.isShown && !currCell.isMarked) return false
+            if (!currCell.isShown && !currCell.isMarked) return false
         }
     }
-    if(gGame.minesToPlace) return gGame.markedCount === gGame.minesToPlace
+    if (gGame.minesToPlace) return gGame.markedCount === gGame.minesToPlace
     return gGame.markedCount === gLevel.mines
 }
 
@@ -128,11 +135,12 @@ function revealNearbyCells(rowIdx, colIdx) {
         if (i < 0 || i >= gBoard.length) continue
         for (var j = colIdx - 1; j < colIdx + 2; j++) {
             if (j < 0 || j >= gBoard.length) continue
-            if(gBoard[i][j].isShown) continue
+            if (gBoard[i][j].isShown) continue
 
             var currCell = gBoard[i][j]
 
             currCell.isShown = true
+            currCell.isHint = true
             revealedCells.push(currCell)
         }
     }
@@ -140,21 +148,51 @@ function revealNearbyCells(rowIdx, colIdx) {
     setTimeout(() => {
         revealedCells.forEach(cell => {
             cell.isShown = false
+            cell.isHint = false
         })
         renderBoard()
     }, 1000)
+    gGame.hintCount--
+}
+
+function handleMegaMode(elCell, cornerCoord) {
+    gGame.megaHintCorners.push(cornerCoord)
+    elCell.classList.add('mega')
+
+    if (gGame.megaHintCorners.length === 2) {
+        const topLeft = gGame.megaHintCorners[0]
+        const bottomRight = gGame.megaHintCorners[1]
+        revealAllMinesAtRange(topLeft, bottomRight)
+
+        gGame.isMegaMode = false
+        gGame.isMegaUsed = true
+    }
+}
+
+function getCornersFromUser() {
+    var cornersChose = 0
+
+    const elCells = document.querySelectorAll('.cell')
+    elCells.forEach(cell => {
+        cell.addEventListener('click', function () {
+            cornersChose++
+            gGame.megaHintCorners.push(getCellCoords(cell))
+            cell.classList.add('mega')
+            console.log(gGame.megaHintCorners);
+        })
+    })
 }
 
 function expandShown(i, j) {
-    
+
     if (i < 0 || i >= gBoard.length) return
     if (j < 0 || j >= gBoard.length) return
     if (gBoard[i][j].isShown) return
-    
+
     gGame.cellStack.push({ element: null, cell: gBoard[i][j], i, j })
     gBoard[i][j].isShown = true
     gGame.shownCount++
-    
+
     if (gBoard[i][j].minesAroundCount > 0) return
 
     // Check upper row neighbors
@@ -178,7 +216,9 @@ function resetGame() {
         isDarkMode: false,
         isHintMode: false,
         isManualMode: false,
-        isMinesPlaced: false,
+        isManualUsed: false,
+        isMegaMode: false,
+        isMegaUsed: false,
         minesToPlace: 0,
         minesPlaced: 0,
         liveCount: 3,
@@ -187,6 +227,7 @@ function resetGame() {
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0,
-        cellStack: []
+        cellStack: [],
+        megaHintCorners: []
     }
 }

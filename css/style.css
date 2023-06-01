@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: rgb(235, 235, 235);
+}
+
 body, .main-container {
     margin: 0;
     display: flex;
@@ -53,10 +57,6 @@ body, .main-container {
     border-radius: 5px;
 }
 
-.cell .hinted {
-    background-color: aliceblue;
-}
-
 #slider {
     width: 70px;
 }
@@ -77,6 +77,7 @@ body, .main-container {
 }
 
 .cell {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 18px;
     width: 1.7em;
     height: 1.7em;
@@ -86,29 +87,44 @@ body, .main-container {
     transition: .1s;
 }
 
+.hinted {
+    background-color: yellow !important;
+}
+
+.mega {
+    background-color: orange !important;
+}
+
 .blue {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: blue;
 }
 
 .green {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: green;
 }
 
 .red {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: red;
 }
 
 .darkblue {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: darkblue;
 }
 
 .darkred {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: darkred;
+}
+
+.darkkhaki {
+    color: darkkhaki;
+}
+
+.darkorange {
+    color: darkorange;
+}
+
+.darkmagneta {
+    color: darkmagenta;
 }
 
 .clicked {
@@ -122,7 +138,7 @@ body, .main-container {
 
 .undo {
     position: absolute;
-    transform: translate(500%, -600%);
+    transform: translate(500%, -650%);
     font-size: 25px;
 }
 

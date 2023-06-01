@@ -16,3 +16,9 @@ function playSound(name) {
 function getSelector(coords) {
     return `.cell-${coords.i}-${coords.j}`
 }
+
+function getCellCoords(elCell) {
+    const i = +elCell.className.split('-')[1]
+    const j = +elCell.className.split('-')[2]
+    return {i, j}
+} 
