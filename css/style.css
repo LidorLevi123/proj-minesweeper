@@ -6,7 +6,12 @@ body {
     background-color: rgb(235, 235, 235);
 }
 
-body, .main-container {
+button {
+    cursor: pointer;
+}
+
+body,
+.main-container {
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -19,6 +24,46 @@ body, .main-container {
 .main-container {
     height: 600px;
     width: 500px;
+}
+
+.leaderboard-container {
+    position: absolute;
+    width: 500px;
+    height: 510px;
+    background-color: lightgray;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.close-leaderboard {
+    position: absolute;
+    right: 1px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.leader-board {
+    border-collapse: collapse;
+    border: 2px solid black;
+    overflow: scroll;
+}
+
+.leaderboard-container th, .leaderboard-container td {
+    text-align: center;
+    padding: 8px;
+    width: 10%;
+}
+
+.leaderboard-container th {
+    font-size: 20px;
+    background-color: #f2f2f29b;
+}
+
+.leaderboard-container tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
 .board {
@@ -35,13 +80,15 @@ body, .main-container {
 .info-container {
     display: flex;
     padding: 5px 5px;
-    width: 31vw;
+    width: 20.5vw;
+    min-width: 390px;
     text-align: left;
     margin-bottom: 1%;
     background-color: gray;
 }
 
-.total-mines, .timer {
+.total-mines,
+.timer {
     background-color: #111;
     width: 60px;
     color: red;
@@ -58,7 +105,8 @@ body, .main-container {
     cursor: pointer;
 }
 
-.lives-container, .hints-container {
+.lives-container,
+.hints-container {
     text-align: center;
     font-size: 20px;
     width: 5em;
@@ -87,7 +135,7 @@ body, .main-container {
     box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.5);
 }
 
-.square + .go {
+.square+.go {
     width: 4vw;
 }
 
@@ -153,7 +201,7 @@ body, .main-container {
 
 .undo {
     position: absolute;
-    transform: translate(500%, -650%);
+    transform: translate(500%, -750%);
     font-size: 25px;
 }
 

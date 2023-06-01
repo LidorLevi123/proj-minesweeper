@@ -30,9 +30,8 @@ function onCellClicked(elCell, i, j, event) {
             else handleMine(elCell, cell)
         }
     }
-
-    checkGameOver()
     renderBoard()
+    checkGameOver()
 }
 
 function onHandleHint(elHint) {
@@ -194,5 +193,4 @@ function onDestroyMines() {
         setMinesNegsCount()
         renderBoard()
     }, 600)
-    if(gLevel.mines === 2) gGame.markedCount--
 }

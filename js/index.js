@@ -115,9 +115,12 @@ function checkGameOver() {
     if (gGame.liveCount <= 0) {
         gGame.isOn = false
         updateSmiley(SMILEY_DEAD)
+        clearInterval(gTimerInterval)
     } else if (checkVictory()) {
         gGame.isOn = false
         updateSmiley(SMILEY_WIN)
+        clearInterval(gTimerInterval)
+        addToLeaderBoard()
     }
 }
 
