@@ -173,21 +173,25 @@ function onDestroyMines() {
 
     if(!mines.length) return
 
+    console.log(mines.length);
     for (var i = 0; i < 3; i++) {
+        if(!mines.length) break
         var randIdx = getRandomInt(0, mines.length)
 
-        mines[randIdx].isShown = true
         blownMines.push(mines[randIdx])
+        mines[randIdx].isShown = true
+        mines.splice(randIdx, 1)
     }
     renderBoard()
 
     setTimeout(()=> {
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < blownMines.length; i++) {
             blownMines[i].isBlown = true
             blownMines[i].isMine = false
+            gGame.markedCount++
         }
         setMinesNegsCount()
         renderBoard()
     }, 600)
-
+    if(gLevel.mines === 2) gGame.markedCount--
 }
