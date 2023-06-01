@@ -25,6 +25,13 @@ body, .main-container {
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.6);
 }
 
+.dog {
+    margin-bottom: 10px;
+    width: 50px;
+    cursor: pointer;
+    transition: .3s;
+}
+
 .info-container {
     display: flex;
     padding: 5px 5px;

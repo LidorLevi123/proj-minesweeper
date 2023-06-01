@@ -143,6 +143,7 @@ function onToggleDarkMode() {
     const elCircle = document.querySelector('.circle')
     const elBody = document.querySelector('body')
     const elAll = document.querySelector('*')
+    const elDogImg = document.querySelector('.dog')
 
     if (gGame.isDarkMode) {
         elCircle.style.left = '57px'
@@ -150,6 +151,7 @@ function onToggleDarkMode() {
         elSlider.style.backgroundColor = 'rgb(235, 235, 235)'
         elBody.style.backgroundColor = '#111'
         elAll.style.color = 'white'
+        elDogImg.style.filter = 'hue-rotate(1turn)'
     } else {
         elCircle.style.left = '3px'
         elCircle.style.backgroundColor = 'rgb(235, 235, 235)'
@@ -161,4 +163,31 @@ function onToggleDarkMode() {
 
 function onMegaHint() {
     gGame.isMegaMode = true
+}
+
+function onDestroyMines() {
+    if(!gGame.isClickedOnce) return
+
+    const mines = getAllMinesLocations()
+    const blownMines = []
+
+    if(!mines.length) return
+
+    for (var i = 0; i < 3; i++) {
+        var randIdx = getRandomInt(0, mines.length)
+
+        mines[randIdx].isShown = true
+        blownMines.push(mines[randIdx])
+    }
+    renderBoard()
+
+    setTimeout(()=> {
+        for (var i = 0; i < 3; i++) {
+            blownMines[i].isBlown = true
+            blownMines[i].isMine = false
+        }
+        setMinesNegsCount()
+        renderBoard()
+    }, 600)
+
 }

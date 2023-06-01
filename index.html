@@ -9,11 +9,12 @@
 </head>
 <body onload="onInit()">
 
-    <div title="Toggle Dark-Mode" class="dark-slider" onclick="onToggleDarkMode()">
+    <div onclick="onToggleDarkMode()" title="Toggle Dark-Mode" class="dark-slider">
         <div class="circle"></div>
     </div>
-
+    
     <div class="main-container">
+        <img onclick="onDestroyMines()" title="Mine Exterminator" class="dog" src="img/dog.jpg" alt="dog.jpg">
 
         <div class="levels-container" style="margin-bottom: 5px;">
             <button onclick="onChangeLevel(1)" style="cursor: pointer;">Beginner</button>
@@ -28,13 +29,13 @@
             <input oninput="onChangeSliderValue(this)" type="range" id="slider" min="1" max="32" style="display: none">
             <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
         </div>
-
+        
         <div class="info-container">
             <span class="lives-container"></span>
-            <span title="Reset" class="smiley" onclick="onInit(), onSwitchToSlider(false)">😀</span>
+            <span onclick="onInit(), onSwitchToSlider(false)" title="Reset" class="smiley">😀</span>
             <span title="Hint" class="hints-container"></span>
         </div>
-
+        
         <table>
             <tbody class="board"></tbody>
         </table>

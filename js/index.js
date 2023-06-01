@@ -6,6 +6,7 @@ const EXPERT = { size: 12, mines: 32 }
 
 const HEART = '💖'
 const MINE = '💣'
+const MINE_BLOWN = '🔥'
 const FLAG = '🚩'
 const HINT = '💡'
 const EMPTY = ''
@@ -37,6 +38,7 @@ function buildBoard() {
                 minesAroundCount: 0,
                 isShown: false,
                 isMine: false,
+                isBlown: false,
                 isMarked: false,
                 isClicked: false,
                 isHint: false,
@@ -81,6 +83,7 @@ function renderBoard() {
             } else {
                 cellData = EMPTY
             }
+            if(currCell.isBlown) cellData = MINE_BLOWN
 
             strHTML += `<td 
             class="${className} cell-${i}-${j}" 
@@ -127,6 +130,31 @@ function checkVictory() {
     return gGame.markedCount === gLevel.mines
 }
 
+function revealAllCellsAtRange(topLeftCoord, bottomRightCoord) {
+    var revealedCells = []
+
+    for (var i = topLeftCoord.i; i < bottomRightCoord.i + 1; i++) {
+        for (var j = topLeftCoord.j; j < bottomRightCoord.j + 1; j++) {
+            if(gBoard[i][j].isShown) continue
+
+            var currCell = gBoard[i][j]
+
+            currCell.isShown = true
+            currCell.isMegaHint = true
+            revealedCells.push(currCell)
+        }
+    }
+    renderBoard()
+
+    setTimeout(() => {
+        revealedCells.forEach(cell => {
+            cell.isShown = false
+            cell.isMegaHint = false
+        })
+        renderBoard()
+    }, 3000)
+}
+
 function revealNearbyCells(rowIdx, colIdx) {
 
     var revealedCells = []
@@ -162,7 +190,7 @@ function handleMegaMode(elCell, cornerCoord) {
     if (gGame.megaHintCorners.length === 2) {
         const topLeft = gGame.megaHintCorners[0]
         const bottomRight = gGame.megaHintCorners[1]
-        revealAllMinesAtRange(topLeft, bottomRight)
+        revealAllCellsAtRange(topLeft, bottomRight)
 
         gGame.isMegaMode = false
         gGame.isMegaUsed = true
@@ -187,7 +215,7 @@ function expandShown(i, j) {
 
     if (i < 0 || i >= gBoard.length) return
     if (j < 0 || j >= gBoard.length) return
-    if (gBoard[i][j].isShown) return
+    if (gBoard[i][j].isShown || gBoard[i][j].isMine) return
 
     gGame.cellStack.push({ element: null, cell: gBoard[i][j], i, j })
     gBoard[i][j].isShown = true
