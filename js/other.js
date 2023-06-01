@@ -29,3 +29,9 @@ function updateSmiley(smiley) {
         elSmiley.innerText = SMILEY_NORMAL
     }, 1200)
 }
+
+function updateMinesLeft() {
+    const elMinesLeft = document.querySelector('.total-mines')
+    const minesLeft = gGame.isManualUsed ? gGame.minesToPlace - gGame.markedCount : gLevel.mines - gGame.markedCount
+    elMinesLeft.innerText = minesLeft
+}

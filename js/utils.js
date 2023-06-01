@@ -22,3 +22,9 @@ function getCellCoords(elCell) {
     const j = +elCell.className.split('-')[2]
     return {i, j}
 } 
+
+function timer() {
+    const elTimer = document.querySelector('.timer')
+    elTimer.innerText = gGame.secsPassed
+    gGame.secsPassed++
+}

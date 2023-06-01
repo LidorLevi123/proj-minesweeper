@@ -41,6 +41,14 @@ body, .main-container {
     background-color: gray;
 }
 
+.total-mines, .timer {
+    background-color: #111;
+    width: 60px;
+    color: red;
+    text-align: center;
+    font-size: 30px;
+}
+
 .smiley {
     font-size: 20px;
     border: 2px solid black;

@@ -19,12 +19,14 @@ const SMILEY_DEAD = '💀'
 
 var gBoard
 var gGame
+var gTimerInterval
 var gLevel = EXPERT
 
 function onInit() {
     gBoard = buildBoard()
     gGame = resetGame()
-
+    
+    clearInterval(gTimerInterval)
     renderBoard()
 }
 
@@ -106,6 +108,7 @@ function renderBoard() {
     var elHints = document.querySelector('.hints-container')
     updateLives(elLives)
     updateHints(elHints)
+    updateMinesLeft()
 }
 
 function checkGameOver() {
@@ -197,20 +200,6 @@ function handleMegaMode(elCell, cornerCoord) {
     }
 }
 
-function getCornersFromUser() {
-    var cornersChose = 0
-
-    const elCells = document.querySelectorAll('.cell')
-    elCells.forEach(cell => {
-        cell.addEventListener('click', function () {
-            cornersChose++
-            gGame.megaHintCorners.push(getCellCoords(cell))
-            cell.classList.add('mega')
-            console.log(gGame.megaHintCorners);
-        })
-    })
-}
-
 function expandShown(i, j) {
 
     if (i < 0 || i >= gBoard.length) return
@@ -254,7 +243,8 @@ function resetGame() {
         safeCount: 3,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 0,
+        secsPassed: 1,
+        timerIntervalID: 0,
         cellStack: [],
         megaHintCorners: []
     }

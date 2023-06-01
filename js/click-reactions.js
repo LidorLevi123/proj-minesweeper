@@ -11,6 +11,7 @@ function onCellClicked(elCell, i, j, event) {
 
         if (!gGame.isClickedOnce && !gGame.isManualMode && !gGame.isManualUsed && !gGame.isMegaMode) {
             gGame.isClickedOnce = true
+            gTimerInterval = setInterval(timer, 1000)
             setRandomMines()
             setMinesNegsCount()
         } else if (gGame.isManualMode) {
@@ -123,7 +124,7 @@ function onManualMode(elValue) {
 }
 
 function onUndo() {
-    if (gGame.cellStack.length <= 0) return
+    if (gGame.cellStack.length <= 0 || !gGame.isOn) return
 
     const prevCell = gGame.cellStack.pop()
 
