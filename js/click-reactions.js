@@ -9,14 +9,8 @@ function onCellClicked(elCell, i, j, event) {
 
         if (cell.isShown || cell.isMarked) return
 
-        if (!gGame.isClickedOnce && !gGame.isManualMode && !gGame.isManualUsed && !gGame.isMegaMode) {
-            gGame.cellStack.push([cell, {i, j}])
-            cell.isShown = true
-            renderBoard()
-            setRandomMines()
-            setMinesNegsCount()
-            gTimerInterval = setInterval(updateTimer, 1000)
-            gGame.isClickedOnce = true
+        if (gGame.isHintMode) {
+            revealNearbyCells(i, j)
             return
         } else if (gGame.isManualMode) {
             placeMine(elCell, i, j)
@@ -24,13 +18,20 @@ function onCellClicked(elCell, i, j, event) {
         } else if (gGame.isMegaMode && !gGame.isMegaUsed) {
             handleMegaMode(elCell, { i, j })
             return
-        } else if (gGame.isHintMode) {
-            revealNearbyCells(i, j)
+        } else if (!gGame.isClickedOnce && !gGame.isManualUsed) {
+            gTimerInterval = setInterval(updateTimer, 1000)
+            gGame.cellStack.push([cell, { i, j }])
+            gGame.isClickedOnce = true
+            cell.isShown = true
+            renderBoard()
+            setRandomMines()
+            setMinesNegsCount()
+            return
         } else {
-            gGame.cellStack.push([cell, {i, j}])
-            handleMine(elCell, cell)
+            gGame.cellStack.push([cell, { i, j }])
+            handleMine(cell)
+            expandShown(i, j)
         }
-        expandShown(i, j)
     }
     renderBoard()
     checkGameOver()
@@ -117,7 +118,7 @@ function onUndo() {
     const prevDetails = gGame.cellStack.pop()
 
     const prevCell = prevDetails[0]
-    const prevCellCoords = {i: prevDetails[1].i, j: prevDetails[1].j}
+    const prevCellCoords = { i: prevDetails[1].i, j: prevDetails[1].j }
 
     if (prevCell.isMine) {
         gGame.liveCount++

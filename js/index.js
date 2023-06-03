@@ -1,8 +1,8 @@
 'use strict'
 
-const BEGINNER = { size: 4, mines: 2 }
-const MEDIUM = { size: 8, mines: 14 }
-const EXPERT = { size: 12, mines: 32 }
+const BEGINNER = { level: 'Beginner', size: 4, mines: 2 }
+const MEDIUM = { level: 'Medium', size: 8, mines: 14 }
+const EXPERT = { level: 'Expert', size: 12, mines: 32 }
 
 const HEART = '💖'
 const MINE = '💣'
@@ -105,8 +105,8 @@ function renderBoard() {
 
 function checkGameOver() {
     if (gGame.liveCount <= 0) {
-        updateSmiley(SMILEY_DEAD)
         gGame.isOn = false
+        updateSmiley(SMILEY_DEAD)
         clearInterval(gTimerInterval)
     } else if (checkVictory()) {
         gGame.isOn = false
@@ -181,6 +181,7 @@ function revealNearbyCells(rowIdx, colIdx) {
             revealedCells.push(currCell)
         }
     }
+    renderBoard()
 
     setTimeout(() => {
         revealedCells.forEach(cell => {
@@ -234,7 +235,6 @@ function expandShown(i, j) {
 }
 
 function resetGame() {
-    updateSmiley(SMILEY_NORMAL)
     return {
         isOn: true,
         isClickedOnce: false,
@@ -252,7 +252,8 @@ function resetGame() {
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0,
+        timeoutID: 0,
         cellStack: [],
-        megaHintCorners: []
+        megaHintCorners: [],
     }
 }

@@ -14,9 +14,8 @@ function placeMine(elCell, i, j) {
     }
 }
 
-function handleMine(elCell, cell) {
+function handleMine(cell) {
     if(!cell.isMine) return
-    elCell.style.backgroundColor = 'red'
     cell.isShown = true
     gGame.liveCount--
     gGame.shownCount++

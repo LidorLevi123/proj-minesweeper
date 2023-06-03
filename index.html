@@ -7,44 +7,49 @@
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body oncontextmenu="event.preventDefault()" onload="onInit(), updateLeaderBoard()">
+<body onload="onInit(), updateLeaderBoard()">
 
-    <div onclick="onToggleDarkMode()" title="Toggle Dark-Mode" class="dark-slider">
-        <div class="circle"></div>
-    </div>
     
     <div class="main-container">
-        <img onclick="onDestroyMines()" title="Mine Exterminator" class="dog" src="img/dog.jpg" alt="dog.jpg">
-
-        <div class="levels-container" style="margin-bottom: 5px;">
-            <button onclick="onChangeLevel(1)" style="cursor: pointer;">Beginner</button>
-            <button onclick="onChangeLevel(2)" style="cursor: pointer;">Medium</button>
-            <button onclick="onChangeLevel(3)" style="cursor: pointer;">Expert</button>
+        
+        <div class="buttons-container">
+            
+            <div onclick="onToggleDarkMode()" title="Toggle Dark-Mode" class="dark-slider">
+                <div class="circle"></div>
+            </div>
+            
+            <img onclick="onDestroyMines()" title="Mine Exterminator" class="dog" src="img/dog.jpg" alt="dog.jpg">
+            
+            <div class="levels-container">
+                <button class="beginner" onclick="onChangeLevel(1)">Beginner</button>
+                <button class="medium" onclick="onChangeLevel(2)">Medium</button>
+                <button class="expert" onclick="onChangeLevel(3)">Expert</button>
+            </div>
+            
+            <div class="utils-container">
+                <button onclick="onSafeClick()">Safe Click👼</button>
+                <button onclick="onMegaHint()">Mega Hint⚡</button>
+                <button onclick="onSwitchToSlider(true)" class="manual-btn">Manual Mode🔨</button>
+                <input oninput="onChangeSliderValue(this)" type="range" id="slider" style="display: none">
+                <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
+            </div>
+            
+            <div class="info-container">
+                <div class="total-mines"></div>
+                <span class="lives-container"></span>
+                <span onclick="onInit(), onSwitchToSlider(false)" title="Reset" class="smiley">😀</span>
+                <button onclick="onUndo()" title="Undo Move" class="undo">↪</button>
+                <span title="Hint" class="hints-container"></span>
+                <div class="timer"></div>
+            </div>
         </div>
         
-        <div class="buttons-container" style="margin-bottom: 5px;">
-            <button onclick="onSafeClick()" style="cursor: pointer;">Safe Click</button>
-            <button onclick="onMegaHint()">Mega Hint</button>
-            <button onclick="onSwitchToSlider(true)" class="manual-btn" style="cursor: pointer;">Manual Mode</button>
-            <input oninput="onChangeSliderValue(this)" type="range" id="slider" min="1" max="32" style="display: none">
-            <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
-        </div>
-        
-        <div class="info-container">
-            <div class="total-mines"></div>
-            <span class="lives-container"></span>
-            <span onclick="onInit(), onSwitchToSlider(false)" title="Reset" class="smiley">😀</span>
-            <span title="Hint" class="hints-container"></span>
-            <div class="timer">0</div>
-        </div>
-        
-        <table>
+        <table oncontextmenu="event.preventDefault()">
             <tbody class="board"></tbody>
         </table>
         
     </div>
-    <button onclick="openLeaderboard(true)">Show Leaderboard</button>
-    <button onclick="onUndo()" title="Undo Move" class="undo">↪</button>
+    <button class="leaderboard-btn" onclick="openLeaderboard(true)">Show Leaderboard🏆</button>
 
     <div class="leaderboard-container" style="display: none">
         <button onclick="openLeaderboard(false)" class="close-leaderboard">✖</button>
@@ -52,6 +57,7 @@
             <thead>
                 <tr>
                   <th>Player</th>
+                  <th>Level</th>
                   <th>Time</th>
                 </tr>
               </thead>

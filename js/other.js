@@ -22,14 +22,15 @@ function updateHints() {
 }
 
 function updateSmiley(smiley) {
+    clearTimeout(gGame.timeoutID)
     var elSmiley = document.querySelector('.smiley')
     elSmiley.innerText = smiley
 
-    if (smiley === SMILEY_DEAD || smiley === SMILEY_WIN) return
-
-    setTimeout(() => {
+    if (!gGame.isOn) return
+    
+    gGame.timeoutID = setTimeout(() => {
         elSmiley.innerText = SMILEY_NORMAL
-    }, 1200)
+    }, 1000)
 }
 
 function updateMinesLeft() {
@@ -39,30 +40,20 @@ function updateMinesLeft() {
     elMinesLeft.innerText = minesLeft
 }
 
-function openLeaderboard(isOpen) {
-    const elLeaderBoard = document.querySelector('.leaderboard-container')
-    elLeaderBoard.style.display = isOpen ? 'inline-block' : 'none'
-}
-
-function addToLeaderBoard() {
-    const isInterested = confirm('You won! Are you interested in being displayed on the leaderboards?')
-    if(!isInterested || !gGame.secsPassed) return
-
-    const name = prompt('I knew you got that winner sense inside you ;)\nPlease enter your name.')
-    localStorage.setItem(name, gGame.secsPassed)
-    updateLeaderBoard()
-}
-
 function updateLeaderBoard() {
     if(localStorage.length <= 0) return
     var strHTML = ''
 
     for (var i = 0; i < localStorage.length; i++) {
         var name = localStorage.key(i);
-        var time = localStorage.getItem(name)-1;
+        var nameStats = localStorage.getItem(name).split(',')
+        var level = nameStats[0]
+        var time = nameStats[1]
+
         strHTML += '<tr>'
         
         strHTML += `<td>${name}</td>`
+        strHTML += `<td>${level}</td>`
         strHTML += `<td>${time}</td>`
 
         strHTML += '</tr>'
@@ -71,3 +62,20 @@ function updateLeaderBoard() {
     elLeaderBoard.innerHTML = strHTML
 }
 
+function openLeaderboard(isOpen) {
+    const elLeaderBoard = document.querySelector('.leaderboard-container')
+    elLeaderBoard.style.display = isOpen ? 'inline-block' : 'none'
+}
+
+function addToLeaderBoard() {
+    if(gGame.isManualUsed) return
+    setTimeout(()=> {
+        const isInterested = confirm('You won! Are you interested in being displayed on the leaderboards?')
+        if(!isInterested || !gGame.secsPassed) return
+    
+        const name = prompt('I knew you got that winner sense inside you ;)\nPlease enter your name.')
+        const statsStr = `${gLevel.level}, ${gGame.secsPassed-1}`
+        localStorage.setItem(name, statsStr)
+        updateLeaderBoard()
+    },50)
+}
