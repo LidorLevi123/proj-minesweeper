@@ -1,6 +1,7 @@
 'use strict'
 
-function updateLives(elLives) {
+function updateLives() {
+    const elLives = document.querySelector('.lives-container')
     var spanHTML = '<span>'
 
     for (var i = 0; i < gGame.liveCount; i++) {
@@ -10,7 +11,8 @@ function updateLives(elLives) {
     elLives.innerHTML = spanHTML
 }
 
-function updateHints(elHints) {
+function updateHints() {
+    const elHints = document.querySelector('.hints-container')
     var spanHTML = ''
 
     for (var i = 0; i < gGame.hintCount; i++) {
@@ -32,23 +34,19 @@ function updateSmiley(smiley) {
 
 function updateMinesLeft() {
     const elMinesLeft = document.querySelector('.total-mines')
-    const minesLeft = gGame.isManualUsed ? gGame.minesToPlace - gGame.markedCount : gLevel.mines - gGame.markedCount
+    var minesLeft = gGame.isManualUsed ? gGame.minesToPlace - gGame.markedCount : gLevel.mines - gGame.markedCount
+    minesLeft = minesLeft < 0 ? 0 : minesLeft
     elMinesLeft.innerText = minesLeft
 }
 
 function openLeaderboard(isOpen) {
-    if(isOpen) {
-        const elLeaderBoard = document.querySelector('.leaderboard-container')
-        elLeaderBoard.style.display = 'inline-block'
-    } else {
-        const elLeaderBoard = document.querySelector('.leaderboard-container')
-        elLeaderBoard.style.display = 'none'
-    }
+    const elLeaderBoard = document.querySelector('.leaderboard-container')
+    elLeaderBoard.style.display = isOpen ? 'inline-block' : 'none'
 }
 
 function addToLeaderBoard() {
     const isInterested = confirm('You won! Are you interested in being displayed on the leaderboards?')
-    if(!isInterested) return
+    if(!isInterested || !gGame.secsPassed) return
 
     const name = prompt('I knew you got that winner sense inside you ;)\nPlease enter your name.')
     localStorage.setItem(name, gGame.secsPassed)

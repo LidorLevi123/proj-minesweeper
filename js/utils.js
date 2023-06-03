@@ -23,7 +23,7 @@ function getCellCoords(elCell) {
     return {i, j}
 } 
 
-function timer() {
+function updateTimer() {
     const elTimer = document.querySelector('.timer')
     elTimer.innerText = gGame.secsPassed
     gGame.secsPassed++

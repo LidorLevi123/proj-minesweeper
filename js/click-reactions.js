@@ -2,33 +2,35 @@
 
 function onCellClicked(elCell, i, j, event) {
     if (!gGame.isOn) return
-    var cell = gBoard[i][j]
-
     if (event.button === 2) {
-        onCellMarked(cell)
+        onCellMarked(gBoard[i][j])
     } else {
+        const cell = gBoard[i][j]
+
         if (cell.isShown || cell.isMarked) return
 
         if (!gGame.isClickedOnce && !gGame.isManualMode && !gGame.isManualUsed && !gGame.isMegaMode) {
-            gGame.isClickedOnce = true
-            gTimerInterval = setInterval(timer, 1000)
+            gGame.cellStack.push([cell, {i, j}])
+            cell.isShown = true
+            renderBoard()
             setRandomMines()
             setMinesNegsCount()
+            gTimerInterval = setInterval(updateTimer, 1000)
+            gGame.isClickedOnce = true
+            return
         } else if (gGame.isManualMode) {
             placeMine(elCell, i, j)
             return
         } else if (gGame.isMegaMode && !gGame.isMegaUsed) {
-            handleMegaMode(elCell, {i, j})
+            handleMegaMode(elCell, { i, j })
             return
-        } 
-        if (gGame.isHintMode) {
-            gGame.isHintMode = false
+        } else if (gGame.isHintMode) {
             revealNearbyCells(i, j)
         } else {
-            gGame.cellStack.push({ element: elCell, cell, i, j })
-            if (!cell.isMine) expandShown(i, j)
-            else handleMine(elCell, cell)
+            gGame.cellStack.push([cell, {i, j}])
+            handleMine(elCell, cell)
         }
+        expandShown(i, j)
     }
     renderBoard()
     checkGameOver()
@@ -36,20 +38,12 @@ function onCellClicked(elCell, i, j, event) {
 
 function onHandleHint(elHint) {
     gGame.isHintMode = !gGame.isHintMode
-    var elHints = document.querySelector('.hints-container')
-
-    if (gGame.isHintMode) elHint.style.backgroundColor = 'yellow'
-    else updateHints(elHints)
+    elHint.style.backgroundColor = gGame.isHintMode ? 'yellow' : updateHints()
 }
 
 function onCellMarked(cell) {
-    if (cell.isMarked) {
-        cell.isMarked = false
-        gGame.markedCount--
-    } else {
-        cell.isMarked = true
-        gGame.markedCount++
-    }
+    cell.isMarked = !cell.isMarked
+    gGame.markedCount += cell.isMarked ? 1 : -1
 }
 
 function onChangeLevel(diff) {
@@ -68,16 +62,15 @@ function onChangeLevel(diff) {
 
 function onSafeClick() {
 
+    if (!gGame.isClickedOnce) return
     if (gGame.safeCount <= 0) return
-    if (onSafeClick.callCount >= 10) return
-
-    onSafeClick.callCount = (onSafeClick.callCount || 0) + 1
+    if (!isEmptyCellsLeft()) return
 
     const randI = getRandomInt(0, gBoard.length)
     const randJ = getRandomInt(0, gBoard.length)
     const cell = gBoard[randI][randJ]
 
-    if (cell.isMine || cell.isShown) onSafeClick()
+    if (cell.isMine || cell.isShown || cell.isMarked) onSafeClick()
     else {
         const selector = getSelector({ i: randI, j: randJ })
         const elCell = document.querySelector(selector)
@@ -87,22 +80,20 @@ function onSafeClick() {
         elCell.style.backgroundColor = 'white'
         setTimeout(() => {
             elCell.style.backgroundColor = 'rgb(105, 105, 105)'
-        }, 3000)
+        }, 2000)
     }
 }
 
 function onSwitchToSlider(isSlider) {
+    const elManualBtn = document.querySelector('.manual-btn')
+    const elSlider = document.querySelector('#slider')
+    const elAmount = document.querySelector('.square')
+
     if (isSlider) {
-        const elManualBtn = document.querySelector('.manual-btn')
-        const elSlider = document.querySelector('#slider')
-        const elAmount = document.querySelector('.square')
         elManualBtn.style.display = 'none'
         elSlider.style.display = 'inline-block'
         elAmount.style.display = 'inline-block'
     } else {
-        const elManualBtn = document.querySelector('.manual-btn')
-        const elSlider = document.querySelector('#slider')
-        const elAmount = document.querySelector('.square')
         elManualBtn.style.display = 'inline-block'
         elSlider.style.display = 'none'
         elAmount.style.display = 'none'
@@ -110,9 +101,7 @@ function onSwitchToSlider(isSlider) {
 }
 
 function onChangeSliderValue(elSlider) {
-
-    var elSelectedValue = document.querySelector('.amount')
-
+    const elSelectedValue = document.querySelector('.amount')
     elSelectedValue.innerText = elSlider.value
 }
 
@@ -125,15 +114,18 @@ function onManualMode(elValue) {
 function onUndo() {
     if (gGame.cellStack.length <= 0 || !gGame.isOn) return
 
-    const prevCell = gGame.cellStack.pop()
+    const prevDetails = gGame.cellStack.pop()
+
+    const prevCell = prevDetails[0]
+    const prevCellCoords = {i: prevDetails[1].i, j: prevDetails[1].j}
 
     if (prevCell.isMine) {
-        prevCell.element.style.backgroundColor = 'rgb(105, 105, 105)'
         gGame.liveCount++
         gGame.markedCount--
     }
+    prevCell.isShown = false
     gGame.shownCount--
-    gBoard[prevCell.i][prevCell.j] = prevCell
+    gBoard[prevCellCoords.i][prevCellCoords.j] = prevCell
     renderBoard()
 }
 
@@ -142,7 +134,7 @@ function onToggleDarkMode() {
     const elSlider = document.querySelector('.dark-slider')
     const elCircle = document.querySelector('.circle')
     const elBody = document.querySelector('body')
-    const elAll = document.querySelector('*')
+    const elFooter = document.querySelector('h2')
     const elDogImg = document.querySelector('.dog')
 
     if (gGame.isDarkMode) {
@@ -150,14 +142,14 @@ function onToggleDarkMode() {
         elCircle.style.backgroundColor = 'rgb(105, 105, 105)'
         elSlider.style.backgroundColor = 'rgb(235, 235, 235)'
         elBody.style.backgroundColor = '#111'
-        elAll.style.color = 'white'
-        elDogImg.style.filter = 'hue-rotate(1turn)'
+        elFooter.style.color = 'white'
+        elDogImg.style.filter = 'hue-rotate(0turn)'
     } else {
         elCircle.style.left = '3px'
         elCircle.style.backgroundColor = 'rgb(235, 235, 235)'
         elSlider.style.backgroundColor = 'rgb(105, 105, 105)'
         elBody.style.backgroundColor = 'rgb(235, 235, 235)'
-        elAll.style.color = 'black'
+        elFooter.style.color = 'black'
     }
 }
 
@@ -166,25 +158,25 @@ function onMegaHint() {
 }
 
 function onDestroyMines() {
-    if(!gGame.isClickedOnce) return
+    if (!gGame.isClickedOnce) return
 
     const mines = getAllMinesLocations()
     const blownMines = []
 
-    if(!mines.length) return
+    if (!mines.length) return
 
     console.log(mines.length);
     for (var i = 0; i < 3; i++) {
-        if(!mines.length) break
+        if (!mines.length) break
         var randIdx = getRandomInt(0, mines.length)
-
         blownMines.push(mines[randIdx])
+
         mines[randIdx].isShown = true
         mines.splice(randIdx, 1)
     }
     renderBoard()
 
-    setTimeout(()=> {
+    setTimeout(() => {
         for (var i = 0; i < blownMines.length; i++) {
             blownMines[i].isBlown = true
             blownMines[i].isMine = false

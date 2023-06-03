@@ -7,7 +7,7 @@
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body onload="onInit(), updateLeaderBoard()">
+<body oncontextmenu="event.preventDefault()" onload="onInit(), updateLeaderBoard()">
 
     <div onclick="onToggleDarkMode()" title="Toggle Dark-Mode" class="dark-slider">
         <div class="circle"></div>
@@ -44,6 +44,7 @@
         
     </div>
     <button onclick="openLeaderboard(true)">Show Leaderboard</button>
+    <button onclick="onUndo()" title="Undo Move" class="undo">↪</button>
 
     <div class="leaderboard-container" style="display: none">
         <button onclick="openLeaderboard(false)" class="close-leaderboard">✖</button>
@@ -58,7 +59,6 @@
             </tbody>
         </table>
     </div>
-    <button title="Undo Move" class="undo" onclick="onUndo()">↪</button>
     <h2>© Lidor Levi</h2>
     
     <script src="js/utils.js"></script>

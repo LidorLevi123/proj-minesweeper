@@ -9,11 +9,13 @@ function placeMine(elCell, i, j) {
         setMinesNegsCount()
         renderBoard()
         onSwitchToSlider(false)
+        gTimerInterval = setInterval(updateTimer, 1000)
         gGame.isManualMode = false
     }
 }
 
 function handleMine(elCell, cell) {
+    if(!cell.isMine) return
     elCell.style.backgroundColor = 'red'
     cell.isShown = true
     gGame.liveCount--
@@ -68,6 +70,7 @@ function getAllMinesLocations() {
         for (var j = 0; j < gBoard.length; j++) {
 
             var currCell = gBoard[i][j]
+            if(currCell.isMarked) continue
             if(currCell.isMine) mines.push(currCell)
         }
     }

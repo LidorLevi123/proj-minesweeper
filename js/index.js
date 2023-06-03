@@ -16,7 +16,6 @@ const SMILEY_WIN = '😎'
 const SMILEY_HURT = '😲'
 const SMILEY_DEAD = '💀'
 
-
 var gBoard
 var gGame
 var gTimerInterval
@@ -25,8 +24,9 @@ var gLevel = EXPERT
 function onInit() {
     gBoard = buildBoard()
     gGame = resetGame()
-    
+
     clearInterval(gTimerInterval)
+    updateTimer()
     renderBoard()
 }
 
@@ -42,7 +42,6 @@ function buildBoard() {
                 isMine: false,
                 isBlown: false,
                 isMarked: false,
-                isClicked: false,
                 isHint: false,
                 isMegaHint: false
             }
@@ -74,10 +73,10 @@ function renderBoard() {
             else if (currCell.isHint) className += ' hinted'
 
             if (currCell.isShown) {
-                className += ' clicked'
+                className += ' shown'
                 if (currCell.isMine) {
-                    cellData = MINE
                     className += ' mine'
+                    cellData = MINE
                 }
 
             } else if (currCell.isMarked) {
@@ -92,29 +91,22 @@ function renderBoard() {
             onmousedown="onCellClicked(this, ${i}, ${j}, event)">
             ${cellData}
             </td>`
-
         }
         strHTML += '</tr>'
     }
 
-    var elBoard = document.querySelector('.board')
+    const elBoard = document.querySelector('.board')
     elBoard.innerHTML = strHTML
 
-    elBoard.addEventListener('contextmenu', (event) => {
-        event.preventDefault()
-    })
-
-    var elLives = document.querySelector('.lives-container')
-    var elHints = document.querySelector('.hints-container')
-    updateLives(elLives)
-    updateHints(elHints)
+    updateLives()
+    updateHints()
     updateMinesLeft()
 }
 
 function checkGameOver() {
     if (gGame.liveCount <= 0) {
-        gGame.isOn = false
         updateSmiley(SMILEY_DEAD)
+        gGame.isOn = false
         clearInterval(gTimerInterval)
     } else if (checkVictory()) {
         gGame.isOn = false
@@ -125,15 +117,26 @@ function checkGameOver() {
 }
 
 function checkVictory() {
-
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j]
             if (!currCell.isShown && !currCell.isMarked) return false
         }
     }
-    if (gGame.minesToPlace) return gGame.markedCount === gGame.minesToPlace
-    return gGame.markedCount === gLevel.mines
+    if (gGame.minesToPlace) return gGame.markedCount >= gGame.minesToPlace
+    return gGame.markedCount >= gLevel.mines
+}
+
+function isEmptyCellsLeft() {
+    var emptyCells = 0
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            var cell = gBoard[i][j]
+            if (cell.isShown && !cell.isMine) emptyCells++
+        }
+    }
+    var totalMines = gGame.isManualUsed ? gGame.minesToPlace : gLevel.mines
+    return !(gBoard.length ** 2 - emptyCells === totalMines)
 }
 
 function revealAllCellsAtRange(topLeftCoord, bottomRightCoord) {
@@ -141,7 +144,7 @@ function revealAllCellsAtRange(topLeftCoord, bottomRightCoord) {
 
     for (var i = topLeftCoord.i; i < bottomRightCoord.i + 1; i++) {
         for (var j = topLeftCoord.j; j < bottomRightCoord.j + 1; j++) {
-            if(gBoard[i][j].isShown) continue
+            if (gBoard[i][j].isShown) continue
 
             var currCell = gBoard[i][j]
 
@@ -162,7 +165,7 @@ function revealAllCellsAtRange(topLeftCoord, bottomRightCoord) {
 }
 
 function revealNearbyCells(rowIdx, colIdx) {
-
+    gGame.isHintMode = false
     var revealedCells = []
 
     for (var i = rowIdx - 1; i < rowIdx + 2; i++) {
@@ -207,9 +210,11 @@ function expandShown(i, j) {
 
     if (i < 0 || i >= gBoard.length) return
     if (j < 0 || j >= gBoard.length) return
-    if (gBoard[i][j].isShown || gBoard[i][j].isMine) return
 
-    gGame.cellStack.push({ element: null, cell: gBoard[i][j], i, j })
+    const cell = gBoard[i][j]
+    if (cell.isShown || cell.isMine || cell.isMarked) return
+
+    gGame.cellStack.push([cell, { i, j }])
     gBoard[i][j].isShown = true
     gGame.shownCount++
 
@@ -246,8 +251,7 @@ function resetGame() {
         safeCount: 3,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 1,
-        timerIntervalID: 0,
+        secsPassed: 0,
         cellStack: [],
         megaHintCorners: []
     }
