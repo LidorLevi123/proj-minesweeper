@@ -75,3 +75,13 @@ function getAllMinesLocations() {
     }
     return mines
 }
+
+function revealAllMines() {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            var currCell = gBoard[i][j]
+            if(currCell.isMine) currCell.isShown = true
+        }
+    }
+    renderBoard()
+}

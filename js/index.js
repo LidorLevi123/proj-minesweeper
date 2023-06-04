@@ -108,6 +108,7 @@ function checkGameOver() {
         gGame.isOn = false
         updateSmiley(SMILEY_DEAD)
         clearInterval(gTimerInterval)
+        revealAllMines()
     } else if (checkVictory()) {
         gGame.isOn = false
         updateSmiley(SMILEY_WIN)
