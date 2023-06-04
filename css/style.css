@@ -6,7 +6,7 @@ body {
     background-color: rgb(235, 235, 235);
 }
 
-body, .main-container {
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,7 +17,7 @@ body, .main-container {
 
 .main-container {
     width: 400px;
-    height: 400px;
+    height: 260px;
     border-radius: 5px;
 }
 
