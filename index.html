@@ -26,9 +26,9 @@
             </div>
             
             <div class="utils-container">
-                <button onclick="onSafeClick()">Safe Click👼</button>
-                <button onclick="onMegaHint()">Mega Hint⚡</button>
-                <button onclick="onSwitchToSlider(true)" class="manual-btn">Manual Mode🔨</button>
+                <button onclick="onSafeClick()" title="Marks a safe spot. You only have 3 attemps!">Safe Click👼</button>
+                <button onclick="onMegaHint()" title="Reveals an area within a chosen upper left corner and lower right corner.">Mega Hint⚡</button>
+                <button onclick="onSwitchToSlider(true)" title="Enters manual mine placing mode. Click on the number to start!" class="manual-btn">Manual Mode🔨</button>
                 <input oninput="onChangeSliderValue(this)" type="range" id="slider" style="display: none">
                 <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
             </div>

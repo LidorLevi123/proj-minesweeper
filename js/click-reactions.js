@@ -159,7 +159,7 @@ function onMegaHint() {
 }
 
 function onDestroyMines() {
-    if (!gGame.isClickedOnce) return
+    // if (!gGame.isClickedOnce) return
 
     const mines = getAllMinesLocations()
     const blownMines = []

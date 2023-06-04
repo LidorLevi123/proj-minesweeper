@@ -26,7 +26,10 @@ function onInit() {
     gGame = resetGame()
 
     clearInterval(gTimerInterval)
+    
     updateTimer()
+    updateSmiley(SMILEY_NORMAL)
+
     renderBoard()
 }
 
