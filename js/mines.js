@@ -14,8 +14,9 @@ function placeMine(elCell, i, j) {
     }
 }
 
-function handleMine(cell) {
+function handleMine(cell, i, j) {
     if(!cell.isMine) return
+    gGame.cellStack.push([cell, { i, j }])
     cell.isShown = true
     gGame.liveCount--
     gGame.shownCount++

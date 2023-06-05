@@ -7,7 +7,7 @@
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body onload="onInit(), updateLeaderBoard()">
+<body onload="onInit(); updateLeaderBoard()">
 
     
     <div class="main-container">
@@ -27,19 +27,19 @@
             
             <div class="utils-container">
                 <button onclick="onSafeClick()" title="Marks a safe spot. You only have 3 attemps!">Safe Click👼</button>
-                <button onclick="onMegaHint()" title="Reveals an area within a chosen upper left corner and lower right corner.">Mega Hint⚡</button>
+                <button onclick="onMegaHint()" title="Reveals an area within a chosen upper left & lower right corner.">Mega Hint⚡</button>
                 <button onclick="onSwitchToSlider(true)" title="Enters manual mine placing mode. Click on the number to start!" class="manual-btn">Manual Mode🔨</button>
                 <input oninput="onChangeSliderValue(this)" type="range" id="slider" style="display: none">
                 <span onclick="onManualMode(this)" class="square amount" style="display: none">16</span>
             </div>
             
             <div class="info-container">
-                <div class="total-mines"></div>
-                <span class="lives-container"></span>
-                <span onclick="onInit(), onSwitchToSlider(false)" title="Reset" class="smiley">😀</span>
+                <div class="total-mines" style="cursor: default;"></div>
+                <span class="lives-container" style="cursor: default;"></span>
+                <span onclick="onInit(); onSwitchToSlider(false)" title="Reset" class="smiley">😀</span>
                 <button onclick="onUndo()" title="Undo Move" class="undo">↪</button>
                 <span title="Hint" class="hints-container"></span>
-                <div class="timer"></div>
+                <div class="timer" style="cursor: default;"></div>
             </div>
         </div>
     </div>

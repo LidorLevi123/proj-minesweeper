@@ -39,18 +39,22 @@ function buildBoard() {
     for (var i = 0; i < gLevel.size; i++) {
         board.push([])
         for (var j = 0; j < gLevel.size; j++) {
-            board[i][j] = {
-                minesAroundCount: 0,
-                isShown: false,
-                isMine: false,
-                isBlown: false,
-                isMarked: false,
-                isHint: false,
-                isMegaHint: false
-            }
+            board[i][j] = createCell()
         }
     }
     return board
+}
+
+function createCell() {
+    return {
+        minesAroundCount: 0,
+        isShown: false,
+        isMine: false,
+        isBlown: false,
+        isMarked: false,
+        isHint: false,
+        isMegaHint: false
+    }
 }
 
 function renderBoard() {

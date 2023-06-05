@@ -28,8 +28,7 @@ function onCellClicked(elCell, i, j, event) {
             setMinesNegsCount()
             return
         } else {
-            gGame.cellStack.push([cell, { i, j }])
-            handleMine(cell)
+            handleMine(cell, i, j)
             expandShown(i, j)
         }
     }
@@ -166,7 +165,6 @@ function onDestroyMines() {
 
     if (!mines.length) return
 
-    console.log(mines.length);
     for (var i = 0; i < 3; i++) {
         if (!mines.length) break
         var randIdx = getRandomInt(0, mines.length)
